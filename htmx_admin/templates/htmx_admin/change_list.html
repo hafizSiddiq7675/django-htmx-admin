@@ -4,6 +4,8 @@
 {% block extrahead %}
 {{ block.super }}
 <link rel="stylesheet" href="{% static 'htmx_admin/htmx-admin.css' %}">
+<script src="{% static 'htmx_admin/htmx.min.js' %}" defer></script>
+<script src="{% static 'htmx_admin/htmx-admin.js' %}" defer></script>
 {% endblock %}
 
 {% block extrastyle %}
@@ -48,14 +50,20 @@
 {% block result_list %}
 {% if htmx_enabled %}
 <div id="result-list-container"
-     hx-trigger="tableRefresh from:body"
+     hx-trigger="refreshTable from:body"
      hx-get="{% htmx_table_body_url opts %}"
-     hx-target="#result-list"
+     hx-target="this"
      hx-swap="innerHTML">
-    <div id="result-list">
-        {% include "htmx_admin/partials/table_body.html" %}
-    </div>
+    {% include "htmx_admin/partials/table_body.html" %}
 </div>
+{% else %}
+{{ block.super }}
+{% endif %}
+{% endblock %}
+
+{% block pagination %}
+{% if htmx_enabled %}
+{# Pagination is included in the HTMX table body for dynamic updates #}
 {% else %}
 {{ block.super }}
 {% endif %}
@@ -63,7 +71,4 @@
 
 {% block footer %}
 {{ block.super }}
-<script src="{% static 'htmx_admin/htmx.min.js' %}"></script>
-<script src="{% static 'htmx_admin/htmx-admin.js' %}"></script>
-{{ media.js }}
 {% endblock %}

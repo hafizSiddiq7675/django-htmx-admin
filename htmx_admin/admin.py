@@ -45,15 +45,7 @@ class HtmxModelAdmin(HtmxResponseMixin, admin.ModelAdmin):
 
     # Template overrides
     change_list_template = 'htmx_admin/change_list.html'
-
-    class Media:
-        css = {
-            'all': ('htmx_admin/htmx-admin.css',)
-        }
-        js = (
-            'htmx_admin/htmx.min.js',
-            'htmx_admin/htmx-admin.js',
-        )
+    # Note: CSS and JS are loaded via the template to ensure single loading
 
     def get_urls(self):
         """Add HTMX-specific URL patterns."""
@@ -212,11 +204,11 @@ class HtmxModelAdmin(HtmxResponseMixin, admin.ModelAdmin):
 
         response = HttpResponse(status=204)
         response['HX-Trigger'] = json.dumps({
-            'rowDeleted': {'id': str(object_id)},
             'showMessage': {
                 'level': 'success',
                 'message': f'{obj_display} deleted successfully.'
-            }
+            },
+            'refreshTable': True
         })
         return response
 
@@ -261,16 +253,22 @@ class HtmxModelAdmin(HtmxResponseMixin, admin.ModelAdmin):
             form = form_class(request.POST, request.FILES, instance=obj)
             if form.is_valid():
                 self.save_model(request, form.instance, form, change=bool(obj))
-                form.save_m2m()
+                # Save many-to-many relationships if the form has them
+                if hasattr(form, 'save_m2m'):
+                    form.save_m2m()
 
-                response = HttpResponse(status=204)
+                # Return empty content with triggers for:
+                # 1. showMessage - display success toast
+                # 2. refreshTable - reload the table data
+                # 3. modalClosed - clean up modal (backup)
+                response = HttpResponse('', status=200)
                 response['HX-Trigger'] = json.dumps({
-                    'modalClosed': True,
-                    'tableRefresh': True,
                     'showMessage': {
                         'level': 'success',
                         'message': f'{form.instance} saved successfully.'
-                    }
+                    },
+                    'refreshTable': True,
+                    'modalClosed': True
                 })
                 return response
             else:

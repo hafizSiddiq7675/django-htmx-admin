@@ -68,6 +68,7 @@
         {% endfor %}
     </tbody>
 </table>
+<p class="paginator">{{ cl.result_count }} {{ opts.verbose_name_plural }}</p>
 {% else %}
 <p class="paginator">{% translate "0 results" %}</p>
 {% endif %}

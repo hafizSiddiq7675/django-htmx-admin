@@ -6,6 +6,12 @@
 (function() {
     'use strict';
 
+    // Prevent multiple initializations
+    if (window.htmxAdminInitialized) {
+        return;
+    }
+    window.htmxAdminInitialized = true;
+
     // ========== Toast Notifications ==========
 
     /**
@@ -21,7 +27,8 @@
         var template = document.getElementById('toast-template');
 
         if (!container || !template) {
-            console.warn('Toast container or template not found');
+            // Fallback: create a simple alert if containers not found
+            console.log('[' + level + '] ' + message);
             return;
         }
 
@@ -60,26 +67,6 @@
         }, 300);
     }
 
-    // Listen for showMessage trigger from server
-    document.body.addEventListener('showMessage', function(event) {
-        var detail = event.detail;
-        if (detail && detail.level && detail.message) {
-            showToast(detail.level, detail.message);
-        }
-    });
-
-    // Listen for showMessages trigger (multiple messages)
-    document.body.addEventListener('showMessages', function(event) {
-        var messages = event.detail;
-        if (Array.isArray(messages)) {
-            messages.forEach(function(msg) {
-                if (msg.level && msg.message) {
-                    showToast(msg.level, msg.message);
-                }
-            });
-        }
-    });
-
     // ========== Modal Management ==========
 
     /**
@@ -95,107 +82,13 @@
         }
     }
 
-    // Listen for modalClosed trigger from server
-    document.body.addEventListener('modalClosed', function() {
-        closeModal();
-    });
-
-    // Close modal on Escape key
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            closeModal();
-        }
-    });
-
-    // Close modal on backdrop click
-    document.addEventListener('click', function(event) {
-        if (event.target.classList.contains('modal-backdrop')) {
-            closeModal();
-        }
-    });
-
-    // ========== Row Deletion Animation ==========
-
-    // Listen for rowDeleted trigger from server
-    document.body.addEventListener('rowDeleted', function(event) {
-        var detail = event.detail;
-        if (detail && detail.id) {
-            var row = document.querySelector('[data-row-id="' + detail.id + '"]');
-            if (row) {
-                row.classList.add('row-fade-out');
-                setTimeout(function() {
-                    row.remove();
-                }, 300);
-            }
-        }
-    });
-
-    // ========== Table Refresh ==========
-
-    // Listen for tableRefresh trigger from server
-    document.body.addEventListener('tableRefresh', function() {
-        var tableContainer = document.getElementById('result-list-container');
-        if (tableContainer) {
-            // HTMX will handle the refresh via hx-trigger on the container
-            htmx.trigger(tableContainer, 'tableRefresh');
-        }
-    });
-
-    // ========== Cell Update Feedback ==========
-
-    // Listen for cellUpdated trigger from server
-    document.body.addEventListener('cellUpdated', function(event) {
-        // Optional: Add visual feedback for successful cell update
-        var target = event.target;
-        if (target && target.classList) {
-            target.classList.add('cell-updated');
-            setTimeout(function() {
-                target.classList.remove('cell-updated');
-            }, 1000);
-        }
-    });
-
-    // ========== Form Success ==========
-
-    // Listen for formSuccess trigger from server
-    document.body.addEventListener('formSuccess', function() {
-        // Close any open modals
-        closeModal();
-    });
-
-    // ========== HTMX Event Handlers ==========
-
-    // Before HTMX sends a request
-    document.body.addEventListener('htmx:beforeRequest', function(event) {
-        // Add loading class
-        var element = event.detail.elt;
-        if (element) {
-            element.classList.add('htmx-loading');
-        }
-    });
-
-    // After HTMX request completes
-    document.body.addEventListener('htmx:afterRequest', function(event) {
-        // Remove loading class
-        var element = event.detail.elt;
-        if (element) {
-            element.classList.remove('htmx-loading');
-        }
-    });
-
-    // Handle HTMX errors
-    document.body.addEventListener('htmx:responseError', function(event) {
-        showToast('error', 'An error occurred. Please try again.');
-    });
-
-    // Handle HTMX network errors
-    document.body.addEventListener('htmx:sendError', function(event) {
-        showToast('error', 'Network error. Please check your connection.');
-    });
-
     // ========== CSRF Token Handling ==========
 
-    // Get CSRF token from cookie
+    /**
+     * Get CSRF token from cookie
+     * @param {string} name - Cookie name
+     * @returns {string|null} - Cookie value
+     */
     function getCookie(name) {
         var cookieValue = null;
         if (document.cookie && document.cookie !== '') {
@@ -211,31 +104,150 @@
         return cookieValue;
     }
 
-    // Configure HTMX to include CSRF token
-    document.body.addEventListener('htmx:configRequest', function(event) {
-        // Add CSRF token to all non-GET requests
-        if (event.detail.verb !== 'get') {
-            var csrfToken = getCookie('csrftoken');
-            if (csrfToken) {
-                event.detail.headers['X-CSRFToken'] = csrfToken;
-            }
-        }
-    });
-
-    // ========== Utility Functions ==========
-
-    // Expose utilities globally for custom usage
+    // ========== Expose utilities globally ==========
     window.htmxAdmin = {
         showToast: showToast,
         closeModal: closeModal,
         getCookie: getCookie
     };
 
-    // ========== Initialize ==========
+    // ========== Initialize Event Listeners ==========
 
-    // Initialize on DOM ready
-    document.addEventListener('DOMContentLoaded', function() {
+    function initEventListeners() {
+        // Ensure body exists
+        if (!document.body) {
+            console.warn('htmx-admin: document.body not available');
+            return;
+        }
+
+        // Listen for showMessage trigger from server
+        document.body.addEventListener('showMessage', function(event) {
+            var detail = event.detail;
+            if (detail && detail.level && detail.message) {
+                showToast(detail.level, detail.message);
+            }
+        });
+
+        // Listen for showMessages trigger (multiple messages)
+        document.body.addEventListener('showMessages', function(event) {
+            var messages = event.detail;
+            if (Array.isArray(messages)) {
+                messages.forEach(function(msg) {
+                    if (msg.level && msg.message) {
+                        showToast(msg.level, msg.message);
+                    }
+                });
+            }
+        });
+
+        // Listen for modalClosed trigger from server
+        document.body.addEventListener('modalClosed', function() {
+            closeModal();
+        });
+
+        // Listen for rowDeleted trigger from server
+        document.body.addEventListener('rowDeleted', function(event) {
+            var detail = event.detail;
+            if (detail && detail.id) {
+                var row = document.querySelector('[data-row-id="' + detail.id + '"]');
+                if (row) {
+                    row.classList.add('row-fade-out');
+                    setTimeout(function() {
+                        row.remove();
+                    }, 300);
+                }
+            }
+        });
+
+        // Listen for refreshTable trigger from server (triggers table reload)
+        document.body.addEventListener('refreshTable', function() {
+            var tableContainer = document.getElementById('result-list-container');
+            if (tableContainer && window.htmx) {
+                // Use the table container's own htmx config to reload
+                htmx.trigger(tableContainer, 'refreshTable');
+            }
+        });
+
+        // Listen for cellUpdated trigger from server
+        document.body.addEventListener('cellUpdated', function(event) {
+            var target = event.target;
+            if (target && target.classList) {
+                target.classList.add('cell-updated');
+                setTimeout(function() {
+                    target.classList.remove('cell-updated');
+                }, 1000);
+            }
+        });
+
+        // Listen for formSuccess trigger from server
+        document.body.addEventListener('formSuccess', function() {
+            closeModal();
+        });
+
+        // ========== HTMX Event Handlers ==========
+
+        // Before HTMX sends a request
+        document.body.addEventListener('htmx:beforeRequest', function(event) {
+            var element = event.detail.elt;
+            if (element) {
+                element.classList.add('htmx-loading');
+            }
+        });
+
+        // After HTMX request completes
+        document.body.addEventListener('htmx:afterRequest', function(event) {
+            var element = event.detail.elt;
+            if (element) {
+                element.classList.remove('htmx-loading');
+            }
+        });
+
+        // Handle HTMX errors
+        document.body.addEventListener('htmx:responseError', function(event) {
+            showToast('error', 'An error occurred. Please try again.');
+        });
+
+        // Handle HTMX network errors
+        document.body.addEventListener('htmx:sendError', function(event) {
+            showToast('error', 'Network error. Please check your connection.');
+        });
+
+        // Configure HTMX to include CSRF token
+        document.body.addEventListener('htmx:configRequest', function(event) {
+            if (event.detail.verb !== 'get') {
+                var csrfToken = getCookie('csrftoken');
+                if (csrfToken) {
+                    event.detail.headers['X-CSRFToken'] = csrfToken;
+                }
+            }
+        });
+
+        // ========== Document Event Handlers ==========
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Close modal on backdrop click
+        document.addEventListener('click', function(event) {
+            if (event.target.classList && event.target.classList.contains('modal-backdrop')) {
+                closeModal();
+            }
+        });
+
         console.log('django-htmx-admin initialized');
-    });
+    }
+
+    // ========== Initialize on DOM Ready ==========
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initEventListeners);
+    } else {
+        // DOM already loaded
+        initEventListeners();
+    }
 
 })();
