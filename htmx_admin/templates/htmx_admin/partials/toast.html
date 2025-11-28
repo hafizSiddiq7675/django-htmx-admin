@@ -1,0 +1,5 @@
+{% load i18n %}
+<div class="toast toast-{{ level }}">
+    <span class="toast-message">{{ message }}</span>
+    <button type="button" class="toast-close" onclick="this.parentElement.remove()">&times;</button>
+</div>

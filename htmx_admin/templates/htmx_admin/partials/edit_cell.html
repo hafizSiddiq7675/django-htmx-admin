@@ -1,0 +1,42 @@
+{% load i18n htmx_admin_tags %}
+<form class="htmx-edit-form"
+      hx-post="{% htmx_edit_url object field %}"
+      hx-target="this"
+      hx-swap="outerHTML">
+    {% csrf_token %}
+
+    <div class="edit-cell-wrapper">
+        {% for field_obj in form %}
+        <div class="edit-cell-input">
+            {{ field_obj }}
+        </div>
+        {% endfor %}
+
+        <div class="edit-cell-actions">
+            <button type="submit" class="btn-save" title="{% translate 'Save' %}">
+                &#10003;
+            </button>
+            <button type="button"
+                    class="btn-cancel"
+                    hx-get="{% htmx_cell_url object field %}"
+                    hx-target="closest .htmx-edit-form"
+                    hx-swap="outerHTML"
+                    title="{% translate 'Cancel' %}">
+                &#10005;
+            </button>
+        </div>
+    </div>
+
+    {% if form.errors %}
+    <div class="edit-cell-errors">
+        {% for field_obj in form %}
+        {% for error in field_obj.errors %}
+        <span class="error">{{ error }}</span>
+        {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+        <span class="error">{{ error }}</span>
+        {% endfor %}
+    </div>
+    {% endif %}
+</form>

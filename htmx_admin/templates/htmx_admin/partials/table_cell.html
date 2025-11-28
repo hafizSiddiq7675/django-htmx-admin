@@ -1,0 +1,11 @@
+{% load htmx_admin_tags %}
+<span class="htmx-cell{% if is_editable %} htmx-editable{% endif %}"
+      {% if is_editable %}
+      hx-get="{% htmx_edit_url object field %}"
+      hx-target="this"
+      hx-swap="outerHTML"
+      hx-trigger="click"
+      title="Click to edit"
+      {% endif %}>
+    {{ value }}
+</span>

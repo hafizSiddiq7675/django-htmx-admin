@@ -1,0 +1,69 @@
+{% extends "admin/change_list.html" %}
+{% load i18n admin_urls static htmx_admin_tags %}
+
+{% block extrahead %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'htmx_admin/htmx-admin.css' %}">
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+{{ media.css }}
+{% endblock %}
+
+{% block content %}
+<div id="htmx-admin-container">
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Toast Template -->
+    <template id="toast-template">
+        <div class="toast">
+            <span class="toast-message"></span>
+            <button type="button" class="toast-close">&times;</button>
+        </div>
+    </template>
+
+    <!-- Modal Container -->
+    <div id="modal-container"></div>
+
+    {% if htmx_enabled %}
+    <div class="htmx-admin-toolbar">
+        {% if modal_fields %}
+        <button type="button"
+                class="btn-add-htmx"
+                hx-get="{% htmx_modal_url opts 'add' %}"
+                hx-target="#modal-container"
+                hx-swap="innerHTML">
+            {% translate "Add" %} {{ opts.verbose_name }}
+        </button>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {{ block.super }}
+</div>
+{% endblock %}
+
+{% block result_list %}
+{% if htmx_enabled %}
+<div id="result-list-container"
+     hx-trigger="tableRefresh from:body"
+     hx-get="{% htmx_table_body_url opts %}"
+     hx-target="#result-list"
+     hx-swap="innerHTML">
+    <div id="result-list">
+        {% include "htmx_admin/partials/table_body.html" %}
+    </div>
+</div>
+{% else %}
+{{ block.super }}
+{% endif %}
+{% endblock %}
+
+{% block footer %}
+{{ block.super }}
+<script src="{% static 'htmx_admin/htmx.min.js' %}"></script>
+<script src="{% static 'htmx_admin/htmx-admin.js' %}"></script>
+{{ media.js }}
+{% endblock %}
