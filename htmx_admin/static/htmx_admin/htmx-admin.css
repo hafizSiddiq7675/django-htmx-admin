@@ -26,6 +26,22 @@
     position: relative;
 }
 
+/* ========== Table Container with Scroll ========== */
+#result-list-container {
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+#result-list-container table {
+    min-width: 100%;
+    white-space: nowrap;
+}
+
+#result-list-container table th,
+#result-list-container table td {
+    padding: 8px 12px;
+}
+
 /* ========== Toolbar ========== */
 .htmx-admin-toolbar {
     margin-bottom: 15px;
@@ -218,12 +234,13 @@
     align-items: center;
     padding: 15px 20px;
     background: var(--htmx-primary);
-    color: white;
+    color: white !important;
 }
 
 .modal-header h3 {
     margin: 0;
     font-size: 18px;
+    color: white !important;
 }
 
 .modal-close {
@@ -255,6 +272,23 @@
 .modal-body .field-box {
     display: flex;
     flex-direction: column;
+}
+
+/* Checkbox fields should be inline */
+.modal-body .field-box input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+.modal-body .form-row:has(input[type="checkbox"]) .field-box {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-body .form-row:has(input[type="checkbox"]) .field-box label {
+    margin-bottom: 0;
+    order: -1;
 }
 
 .modal-body label {
