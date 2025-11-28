@@ -306,6 +306,15 @@
     font-size: 14px;
 }
 
+
+.modal-body select {
+    padding: 8px 12px;
+    border: 1px solid var(--htmx-border);
+    border-radius: 4px;
+    font-size: 14px;
+    height: fit-content;
+}
+
 .modal-body input:focus,
 .modal-body select:focus,
 .modal-body textarea:focus {
