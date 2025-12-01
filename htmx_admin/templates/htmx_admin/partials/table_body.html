@@ -3,19 +3,30 @@
 <table id="result_list">
     <thead>
         <tr>
-            {% if cl.list_display_links %}
             <th scope="col" class="action-checkbox-column">
                 <div class="text">
                     <span><input type="checkbox" id="action-toggle"></span>
                 </div>
             </th>
-            {% endif %}
-            {% for field_name in cl.list_display %}
-            <th scope="col">
+            {% for i, field_name in cl.list_display|enumerate %}
+            {% if field_name != 'action_checkbox' %}
+            <th scope="col" class="column-{{ field_name }}">
                 <div class="text">
-                    <span>{{ field_name|capfirst }}</span>
+                    <a href="?o={{ i|sort_param:cl }}"
+                       hx-get="{% htmx_table_body_url opts %}?o={{ i|sort_param:cl }}"
+                       hx-target="#result-list-container"
+                       hx-swap="innerHTML"
+                       class="sortable">
+                        {{ field_name|capfirst }}
+                        {% with current_order=i|current_sort_order:cl %}
+                        {% if current_order %}
+                        <span class="sort-indicator">{% if current_order == 'desc' %}▼{% else %}▲{% endif %}</span>
+                        {% endif %}
+                        {% endwith %}
+                    </a>
                 </div>
             </th>
+            {% endif %}
             {% endfor %}
             {% if list_editable_htmx %}
             <th scope="col">
@@ -29,12 +40,11 @@
     <tbody>
         {% for result in cl.result_list %}
         <tr class="{% cycle 'row1' 'row2' %}" data-row-id="{{ result.pk }}">
-            {% if cl.list_display_links %}
             <td class="action-checkbox">
                 <input type="checkbox" name="_selected_action" value="{{ result.pk }}" class="action-select">
             </td>
-            {% endif %}
             {% for field_name in cl.list_display %}
+            {% if field_name != 'action_checkbox' %}
             <td class="field-{{ field_name }}">
                 {% if field_name in list_editable_htmx %}
                 {% include "htmx_admin/partials/table_cell.html" with object=result field=field_name value=result|get_field_value:field_name is_editable=True %}
@@ -42,6 +52,7 @@
                 {{ result|get_field_value:field_name }}
                 {% endif %}
             </td>
+            {% endif %}
             {% endfor %}
             {% if list_editable_htmx %}
             <td class="htmx-actions">

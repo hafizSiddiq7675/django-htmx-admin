@@ -206,6 +206,106 @@ def get_field_value(obj, field_name):
     return getattr(obj, field_name, '')
 
 
+@register.filter(name='enumerate')
+def enumerate_filter(iterable):
+    """
+    Enumerate an iterable for use in templates.
+
+    Usage:
+        {% for i, item in items|enumerate %}
+
+    Args:
+        iterable: Any iterable
+
+    Returns:
+        Enumerated iterable with index starting at 1
+    """
+    import builtins
+    return list(builtins.enumerate(iterable, start=1))
+
+
+@register.filter
+def get_item(dictionary, key):
+    """
+    Get an item from a dictionary.
+
+    Usage:
+        {{ my_dict|get_item:key }}
+
+    Args:
+        dictionary: Dict to get item from
+        key: Key to lookup
+
+    Returns:
+        Value or None
+    """
+    if dictionary is None:
+        return None
+    return dictionary.get(key)
+
+
+@register.filter
+def sort_param(index, cl):
+    """
+    Generate the sort parameter for a column.
+
+    Usage:
+        {{ i|sort_param:cl }}
+
+    Args:
+        index: Column index (1-based)
+        cl: ChangeList instance
+
+    Returns:
+        Sort parameter string (e.g., '1' for ascending, '-1' for descending)
+    """
+    # Get current ordering
+    ordering = cl.params.get('o', '')
+
+    # Check if this column is currently being sorted
+    if ordering:
+        current_orders = ordering.split('.')
+        for order in current_orders:
+            if order.lstrip('-') == str(index):
+                # Column is sorted, toggle direction
+                if order.startswith('-'):
+                    return str(index)  # Currently desc, switch to asc
+                else:
+                    return f'-{index}'  # Currently asc, switch to desc
+
+    # Column is not sorted, default to ascending
+    return str(index)
+
+
+@register.filter
+def current_sort_order(index, cl):
+    """
+    Get the current sort order for a column.
+
+    Usage:
+        {{ i|current_sort_order:cl }}
+
+    Args:
+        index: Column index (1-based)
+        cl: ChangeList instance
+
+    Returns:
+        'asc', 'desc', or empty string if not sorted
+    """
+    ordering = cl.params.get('o', '')
+
+    if ordering:
+        current_orders = ordering.split('.')
+        for order in current_orders:
+            if order.lstrip('-') == str(index):
+                if order.startswith('-'):
+                    return 'desc'
+                else:
+                    return 'asc'
+
+    return ''
+
+
 @register.filter
 def is_htmx_editable(field_name, editable_fields):
     """

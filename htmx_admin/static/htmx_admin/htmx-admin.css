@@ -42,6 +42,30 @@
     padding: 8px 12px;
 }
 
+/* ========== Sortable Column Headers ========== */
+#result-list-container table th a.sortable {
+    color: var(--htmx-primary);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+#result-list-container table th a.sortable:hover {
+    color: var(--htmx-primary-hover);
+    text-decoration: underline;
+}
+
+#result-list-container table th .sort-indicator {
+    font-size: 10px;
+    color: var(--htmx-primary);
+}
+
+#result-list-container table th.sorted {
+    background-color: rgba(65, 118, 144, 0.1);
+}
+
 /* ========== Toolbar ========== */
 .htmx-admin-toolbar {
     margin-bottom: 15px;
