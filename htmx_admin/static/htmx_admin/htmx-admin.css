@@ -29,17 +29,27 @@
 /* ========== Table Container with Scroll ========== */
 #result-list-container {
     overflow-x: auto;
+    overflow-y: visible;
     max-width: 100%;
+    width: 100%;
+}
+
+#result-list-container .changelist-results {
+    overflow-x: auto;
+    width: 100%;
 }
 
 #result-list-container table {
     min-width: 100%;
+    width: max-content;
     white-space: nowrap;
+    border-collapse: collapse;
 }
 
 #result-list-container table th,
 #result-list-container table td {
     padding: 8px 12px;
+    vertical-align: middle;
 }
 
 /* ========== Sortable Column Headers ========== */
@@ -181,47 +191,80 @@
 .htmx-actions {
     white-space: nowrap;
     display: flex;
-    gap: 8px;
+    gap: 4px;
     align-items: center;
     justify-content: center;
 }
 
-.htmx-actions button {
-    padding: 8px 14px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all var(--htmx-transition);
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+/* All action buttons - same size */
+.htmx-actions button,
+.htmx-actions a,
+.htmx-actions .btn-edit-page,
+.htmx-actions .btn-edit,
+.htmx-actions .btn-delete {
+    padding: 5px !important;
+    border: none !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    transition: all var(--htmx-transition) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+    min-width: 28px !important;
+    min-height: 28px !important;
+    width: 28px !important;
+    height: 28px !important;
+    box-sizing: border-box !important;
+    text-decoration: none !important;
 }
 
-.htmx-actions button:active {
+/* SVG icons inside buttons - all same size */
+.htmx-actions button svg,
+.htmx-actions a svg,
+.htmx-actions .btn-edit-page svg,
+.htmx-actions .btn-edit svg,
+.htmx-actions .btn-delete svg {
+    width: 14px !important;
+    height: 14px !important;
+    stroke: white !important;
+    flex-shrink: 0 !important;
+    display: block !important;
+}
+
+.htmx-actions button:active,
+.htmx-actions a:active {
     transform: scale(0.95);
 }
 
+/* Button colors */
+.btn-edit-page {
+    background: #6c757d !important;
+    color: white !important;
+}
+
+.btn-edit-page:hover {
+    background: #5a6268 !important;
+}
+
 .btn-edit {
-    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
-    color: white;
+    background: #17a2b8 !important;
+    color: white !important;
 }
 
 .btn-edit:hover {
-    background: linear-gradient(135deg, #138496 0%, #0f6674 100%);
-    box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3);
+    background: #138496 !important;
 }
 
 .btn-delete {
-    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-    color: white;
+    background: #dc3545 !important;
+    color: white !important;
 }
 
 .btn-delete:hover {
-    background: linear-gradient(135deg, #c82333 0%, #a71d2a 100%);
-    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+    background: #c82333 !important;
 }
 
 /* ========== Modal ========== */
@@ -338,6 +381,8 @@
 .modal-body input,
 .modal-body select,
 .modal-body textarea {
+    width: auto;
+    height: auto;
     padding: 8px 12px;
     border: 1px solid var(--htmx-border);
     border-radius: 4px;
@@ -346,6 +391,8 @@
 
 
 .modal-body select {
+    width: auto;
+    height: auto;
     padding: 8px 12px;
     border: 1px solid var(--htmx-border);
     border-radius: 4px;
@@ -392,39 +439,53 @@
 }
 
 .modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    padding: 15px 20px;
-    background: var(--htmx-bg-light);
-    border-top: 1px solid var(--htmx-border);
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 15px 20px !important;
+    background: var(--htmx-bg-light) !important;
+    border-top: 1px solid var(--htmx-border) !important;
+    flex-wrap: nowrap !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
 }
 
 .modal-footer button {
-    padding: 8px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background var(--htmx-transition);
+    padding: 10px 24px !important;
+    border: none !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    transition: background var(--htmx-transition) !important;
+    white-space: nowrap !important;
+    min-width: 80px !important;
+    width: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    display: inline-block !important;
+    text-align: center !important;
 }
 
 .modal-footer .btn-cancel {
-    background: #6c757d;
-    color: white;
+    background: #6c757d !important;
+    color: white !important;
+    margin-right: 30px;
 }
 
 .modal-footer .btn-cancel:hover {
-    background: #5a6268;
+    background: #5a6268 !important;
 }
 
 .modal-footer .btn-save {
-    background: var(--htmx-success);
-    color: white;
+    background: var(--htmx-success) !important;
+    color: white !important;
 }
 
 .modal-footer .btn-save:hover {
-    background: #218838;
+    background: #218838 !important;
 }
 
 /* ========== Toast Notifications ========== */
@@ -575,4 +636,325 @@
     .toast {
         min-width: auto;
     }
+}
+
+/* ========== Grappelli Compatibility ========== */
+/*
+ * Force proper rendering of HTMX table within Grappelli admin.
+ * The border property triggers browser layout calculation.
+ */
+
+/* HTMX admin container */
+#htmx-admin-container {
+    position: relative;
+    display: block;
+}
+
+/* Result list container - the border triggers proper rendering */
+#result-list-container {
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    overflow-x: auto;
+    overflow-y: visible;
+}
+
+/* Grappelli table styling */
+#result-list-container .grp-changelist-results {
+    margin: 0;
+    padding: 0;
+}
+
+#result-list-container table#result_list {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+}
+
+/* Grappelli header cells */
+#result-list-container .grp-th {
+    background: #333;
+    color: #fff;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: normal;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: none;
+}
+
+#result-list-container .grp-th a {
+    color: #fff;
+    text-decoration: none;
+}
+
+#result-list-container .grp-th a:hover {
+    color: #7CA0C7;
+}
+
+#result-list-container .grp-th .sort-indicator {
+    color: #7CA0C7;
+    margin-left: 5px;
+}
+
+/* Grappelli data cells */
+#result-list-container .grp-td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #ddd;
+    background: #fff;
+    font-size: 12px;
+}
+
+#result-list-container .grp-tr:nth-child(even) .grp-td {
+    background: #f9f9f9;
+}
+
+#result-list-container .grp-tr:hover .grp-td {
+    background: #fffde7;
+}
+
+/* Grappelli action buttons in HTMX */
+#result-list-container .htmx-actions {
+    white-space: nowrap;
+}
+
+#result-list-container .htmx-actions .grp-button {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 2px;
+}
+
+#result-list-container .htmx-actions .btn-edit-page.grp-button {
+    background: #6c757d;
+    color: #fff;
+}
+
+#result-list-container .htmx-actions .btn-edit-page.grp-button:hover {
+    background: #5a6268;
+}
+
+#result-list-container .htmx-actions .btn-edit-page.grp-button svg {
+    width: 14px;
+    height: 14px;
+    stroke: #fff;
+}
+
+#result-list-container .htmx-actions .btn-edit.grp-button {
+    background: #309bbf;
+    color: #fff;
+}
+
+#result-list-container .htmx-actions .btn-edit.grp-button:hover {
+    background: #267a99;
+}
+
+#result-list-container .htmx-actions .btn-delete.grp-button {
+    background: #ba2121;
+    color: #fff;
+}
+
+#result-list-container .htmx-actions .btn-delete.grp-button:hover {
+    background: #8a1919;
+}
+
+/* Pagination styling */
+#result-list-container + .grp-pagination,
+#result-list-container + p.grp-pagination {
+    padding: 10px 0;
+    font-size: 11px;
+    color: #666;
+}
+
+/* Grappelli Add button in toolbar */
+.grp-object-tools .btn-add-htmx,
+.grp-object-tools li .btn-add-htmx,
+.grp-object-tools li a.btn-add-htmx,
+ul.grp-object-tools li a.grp-add-link.btn-add-htmx {
+    background: #309bbf !important;
+    color: #ffffff !important;
+    border: none !important;
+    padding: auto;
+    border-radius: auto;
+    cursor: pointer !important;
+    font-size: 11px !important;
+    text-transform: uppercase !important;
+    display: inline-block !important;
+    text-decoration: none !important;
+    line-height: 1.4 !important;
+    width: auto !important;
+    height: auto !important;
+    min-width: auto !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.grp-object-tools .btn-add-htmx:hover,
+.grp-object-tools li .btn-add-htmx:hover,
+.grp-object-tools li a.btn-add-htmx:hover,
+ul.grp-object-tools li a.grp-add-link.btn-add-htmx:hover {
+    background: #267a99 !important;
+    color: #fff !important;
+    text-decoration: none !important;
+}
+
+/* Default admin Add button */
+.btn-add-htmx {
+    background: var(--htmx-primary);
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    display: inline-block;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.btn-add-htmx:hover {
+    background: var(--htmx-primary-hover);
+}
+
+/* Checkbox styling for Grappelli */
+#result-list-container .action-checkbox input[type="checkbox"],
+#result-list-container .action-checkbox-column input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+/* ========== Default Django Admin Theme Compatibility ========== */
+/*
+ * Styles for default Django admin when Grappelli is NOT installed.
+ * These ensure the HTMX table displays properly.
+ */
+
+/* Default admin table styling */
+#result-list-container .changelist-results {
+    margin: 0;
+    padding: 0;
+    overflow-x: auto;
+}
+
+#result-list-container .changelist-results table {
+    width: max-content;
+    min-width: 100%;
+    border-collapse: collapse;
+}
+
+/* Header row styling for default admin */
+#result-list-container table thead th {
+    background: #79aec8;
+    color: #fff;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: none;
+    white-space: nowrap;
+}
+
+#result-list-container table thead th a {
+    color: #fff;
+    text-decoration: none;
+}
+
+#result-list-container table thead th a:hover {
+    color: #e0e0e0;
+}
+
+#result-list-container table thead th .sort-indicator {
+    color: #fff;
+    margin-left: 5px;
+}
+
+/* Data row styling for default admin */
+#result-list-container table tbody tr {
+    border-bottom: 1px solid #ddd;
+}
+
+#result-list-container table tbody tr:nth-child(odd) {
+    background: #fff;
+}
+
+#result-list-container table tbody tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+#result-list-container table tbody tr:hover {
+    background: #fffde7;
+}
+
+#result-list-container table tbody td {
+    padding: 10px 12px;
+    font-size: 13px;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+/* Action buttons in default admin */
+#result-list-container .htmx-actions {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    justify-content: center;
+}
+
+#result-list-container .htmx-actions a,
+#result-list-container .htmx-actions button {
+    flex-shrink: 0;
+}
+
+/* Pagination styling for default admin */
+#result-list-container + .paginator,
+#result-list-container + p.paginator {
+    padding: 10px 0;
+    font-size: 12px;
+    color: #666;
+}
+
+/* Quick Add button styling for default admin toolbar - match Add Category button */
+#changelist .object-tools .btn-add-htmx,
+.object-tools .btn-add-htmx,
+.object-tools li .btn-add-htmx {
+    background: #417690;
+    color: #fff !important;
+    border: none;
+    padding: auto;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: normal;
+    text-transform: uppercase;
+    display: inline-block;
+    text-decoration: none;
+    line-height: 13px;
+    margin: 0;
+    height: auto;
+    vertical-align: middle;
+}
+
+#changelist .object-tools .btn-add-htmx:hover,
+.object-tools .btn-add-htmx:hover,
+.object-tools li .btn-add-htmx:hover {
+    background: #205067;
+    color: #fff !important;
+    text-decoration: none;
+}
+
+/* Match Django admin's object-tools link style */
+.object-tools li {
+    display: inline-block;
+    margin-left: 5px;
 }

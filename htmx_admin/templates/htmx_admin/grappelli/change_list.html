@@ -8,50 +8,37 @@
 <script src="{% static 'htmx_admin/htmx-admin.js' %}" defer></script>
 {% endblock %}
 
-{% block extrastyle %}
-{{ block.super }}
-{{ media.css }}
-{% endblock %}
-
-{% block content %}
-{{ block.super }}
-{% endblock %}
-
 {% block object-tools-items %}
 {{ block.super }}
 {% if htmx_enabled and modal_fields %}
 <li>
-    <button type="button"
-            class="btn-add-htmx"
-            hx-get="{% htmx_modal_url opts 'add' %}"
-            hx-target="#modal-container"
-            hx-swap="innerHTML">
+    <a href="#"
+       class="grp-add-link grp-state-focus btn-add-htmx"
+       hx-get="{% htmx_modal_url opts 'add' %}"
+       hx-target="#modal-container"
+       hx-swap="innerHTML"
+       onclick="return false;">
         {% translate "Quick Add" %}
-    </button>
+    </a>
 </li>
 {% endif %}
 {% endblock %}
 
 {% block result_list %}
 {% if htmx_enabled %}
-<!-- HTMX Containers -->
+<!-- HTMX Containers for Grappelli -->
 <div id="htmx-admin-container">
-    <!-- Toast Container -->
     <div id="toast-container" class="toast-container"></div>
-
-    <!-- Toast Template -->
     <template id="toast-template">
         <div class="toast">
             <span class="toast-message"></span>
             <button type="button" class="toast-close">&times;</button>
         </div>
     </template>
-
-    <!-- Modal Container -->
     <div id="modal-container"></div>
 </div>
 
-<!-- HTMX Table -->
+<!-- HTMX Table for Grappelli -->
 <div id="result-list-container"
      hx-trigger="refreshTable from:body"
      hx-get="{% htmx_table_body_url opts %}"
@@ -68,8 +55,4 @@
 {% if not htmx_enabled %}
 {{ block.super }}
 {% endif %}
-{% endblock %}
-
-{% block footer %}
-{{ block.super }}
 {% endblock %}

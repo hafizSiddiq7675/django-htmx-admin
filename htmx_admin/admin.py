@@ -7,6 +7,7 @@ to provide HTMX-powered interactions like inline editing, modal forms, and more.
 
 import json
 from django import forms
+from django.conf import settings
 from django.contrib import admin
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
@@ -14,6 +15,25 @@ from django.urls import path
 from django.utils.html import format_html
 
 from .mixins import HtmxResponseMixin
+
+
+def detect_admin_theme():
+    """
+    Detect which admin theme is installed.
+
+    Returns:
+        str: 'grappelli', 'jazzmin', 'django-suit', or 'default'
+    """
+    installed_apps = getattr(settings, 'INSTALLED_APPS', [])
+
+    if 'grappelli' in installed_apps:
+        return 'grappelli'
+    elif 'jazzmin' in installed_apps:
+        return 'jazzmin'
+    elif 'suit' in installed_apps:
+        return 'django-suit'
+    else:
+        return 'default'
 
 
 class HtmxModelAdmin(HtmxResponseMixin, admin.ModelAdmin):
@@ -43,9 +63,16 @@ class HtmxModelAdmin(HtmxResponseMixin, admin.ModelAdmin):
     htmx_enabled = True
     toast_messages = True
 
-    # Template overrides
-    change_list_template = 'htmx_admin/change_list.html'
+    # Template will be selected based on admin theme
     # Note: CSS and JS are loaded via the template to ensure single loading
+
+    @property
+    def change_list_template(self):
+        """Select template based on detected admin theme."""
+        theme = detect_admin_theme()
+        if theme == 'grappelli':
+            return 'htmx_admin/grappelli/change_list.html'
+        return 'htmx_admin/change_list.html'
 
     def get_urls(self):
         """Add HTMX-specific URL patterns."""
@@ -293,6 +320,7 @@ class HtmxModelAdmin(HtmxResponseMixin, admin.ModelAdmin):
             HTML fragment for table body
         """
         cl = self.get_changelist_instance(request)
+        admin_theme = detect_admin_theme()
 
         return render(
             request,
@@ -301,17 +329,22 @@ class HtmxModelAdmin(HtmxResponseMixin, admin.ModelAdmin):
                 'cl': cl,
                 'opts': self.model._meta,
                 'list_editable_htmx': self.list_editable_htmx,
+                'admin_theme': admin_theme,
+                'is_grappelli': admin_theme == 'grappelli',
             }
         )
 
     def changelist_view(self, request, extra_context=None):
         """Override to add HTMX context."""
         extra_context = extra_context or {}
+        admin_theme = detect_admin_theme()
         extra_context.update({
             'htmx_enabled': self.htmx_enabled,
             'list_editable_htmx': self.list_editable_htmx,
             'list_filter_htmx': self.list_filter_htmx,
             'modal_fields': self.modal_fields,
             'toast_messages': self.toast_messages,
+            'admin_theme': admin_theme,
+            'is_grappelli': admin_theme == 'grappelli',
         })
         return super().changelist_view(request, extra_context=extra_context)
