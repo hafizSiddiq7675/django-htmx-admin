@@ -1,6 +1,6 @@
 {% load i18n htmx_admin_tags %}
-<div id="htmx-modal" class="modal-backdrop">
-    <div class="modal-dialog">
+<div id="htmx-modal" class="modal-backdrop {% if is_grappelli %}grp-modal{% endif %}">
+    <div class="modal-dialog {% if is_grappelli %}grp-module{% endif %}">
         <div class="modal-header">
             <h3>
                 {% if object %}

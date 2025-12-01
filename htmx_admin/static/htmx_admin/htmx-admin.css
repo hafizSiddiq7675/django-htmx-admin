@@ -674,8 +674,8 @@
 
 /* Grappelli header cells */
 #result-list-container .grp-th {
-    background: #333;
-    color: #fff;
+    background: #EEEEEE;
+    color: #333;
     padding: 10px 12px;
     text-align: left;
     font-weight: normal;
@@ -686,16 +686,16 @@
 }
 
 #result-list-container .grp-th a {
-    color: #fff;
+    color: #333;
     text-decoration: none;
 }
 
 #result-list-container .grp-th a:hover {
-    color: #7CA0C7;
+    color: #309bbf;
 }
 
 #result-list-container .grp-th .sort-indicator {
-    color: #7CA0C7;
+    color: #309bbf;
     margin-left: 5px;
 }
 
@@ -773,38 +773,48 @@
     color: #666;
 }
 
-/* Grappelli Add button in toolbar */
+/* Grappelli Add button in toolbar - match grp-add-link exactly */
 .grp-object-tools .btn-add-htmx,
 .grp-object-tools li .btn-add-htmx,
 .grp-object-tools li a.btn-add-htmx,
-ul.grp-object-tools li a.grp-add-link.btn-add-htmx {
-    background: #309bbf !important;
-    color: #ffffff !important;
+ul.grp-object-tools li a.grp-add-link.btn-add-htmx,
+a.grp-add-link.btn-add-htmx {
+    /* Match Grappelli's grp-add-link styling exactly */
+    background: none !important;
+    background-color: transparent !important;
+    color: #309bbf !important;
     border: none !important;
-    padding: auto;
-    border-radius: auto;
+    padding: 0 !important;
+    border-radius: 0 !important;
     cursor: pointer !important;
     font-size: 11px !important;
+    font-weight: normal !important;
     text-transform: uppercase !important;
-    display: inline-block !important;
+    display: inline !important;
     text-decoration: none !important;
-    line-height: 1.4 !important;
+    line-height: inherit !important;
     width: auto !important;
     height: auto !important;
     min-width: auto !important;
+    min-height: auto !important;
     white-space: nowrap !important;
     overflow: visible !important;
     visibility: visible !important;
     opacity: 1 !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    vertical-align: baseline !important;
 }
 
 .grp-object-tools .btn-add-htmx:hover,
 .grp-object-tools li .btn-add-htmx:hover,
 .grp-object-tools li a.btn-add-htmx:hover,
-ul.grp-object-tools li a.grp-add-link.btn-add-htmx:hover {
-    background: #267a99 !important;
-    color: #fff !important;
-    text-decoration: none !important;
+ul.grp-object-tools li a.grp-add-link.btn-add-htmx:hover,
+a.grp-add-link.btn-add-htmx:hover {
+    background: none !important;
+    background-color: transparent !important;
+    color: #309bbf !important;
+    text-decoration: underline !important;
 }
 
 /* Default admin Add button */
@@ -830,6 +840,70 @@ ul.grp-object-tools li a.grp-add-link.btn-add-htmx:hover {
 #result-list-container .action-checkbox-column input[type="checkbox"] {
     width: auto;
     margin: 0;
+}
+
+/* Grappelli-style Modal Footer - match grp-submit-row */
+.grp-modal .modal-footer,
+body.grp .modal-footer {
+    background: #EEEEEE !important;
+    border-top: 1px solid #ccc !important;
+    padding: 10px 20px !important;
+}
+
+.grp-modal .modal-footer button,
+body.grp .modal-footer button {
+    font-size: 11px !important;
+    text-transform: uppercase !important;
+    padding: 7px 15px !important;
+    border-radius: 3px !important;
+}
+
+.grp-modal .modal-footer .btn-save,
+body.grp .modal-footer .btn-save {
+    background: #309bbf !important;
+    color: #fff !important;
+}
+
+.grp-modal .modal-footer .btn-save:hover,
+body.grp .modal-footer .btn-save:hover {
+    background: #267a99 !important;
+}
+
+.grp-modal .modal-footer .btn-cancel,
+body.grp .modal-footer .btn-cancel {
+    background: #888 !important;
+    color: #fff !important;
+}
+
+.grp-modal .modal-footer .btn-cancel:hover,
+body.grp .modal-footer .btn-cancel:hover {
+    background: #666 !important;
+}
+
+/* Grappelli-style Modal Header */
+.grp-modal .modal-header,
+body.grp .modal-header {
+    background: #EEEEEE !important;
+    color: #333 !important;
+    border-bottom: 1px solid #ccc !important;
+}
+
+.grp-modal .modal-header h3,
+body.grp .modal-header h3 {
+    color: #333 !important;
+    font-size: 12px !important;
+    text-transform: uppercase !important;
+    font-weight: bold !important;
+}
+
+.grp-modal .modal-close,
+body.grp .modal-close {
+    color: #666 !important;
+}
+
+.grp-modal .modal-close:hover,
+body.grp .modal-close:hover {
+    color: #333 !important;
 }
 
 /* ========== Default Django Admin Theme Compatibility ========== */
