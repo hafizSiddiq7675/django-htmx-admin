@@ -1,5 +1,5 @@
 # Build artifacts
-# dist/
+dist/
 build/
 *.egg-info/
 *.egg
@@ -39,3 +39,4 @@ db.sqlite3
 # Local settings
 *.local
 .env
+django_htmx_admin_spec_v2.docx.pdf
