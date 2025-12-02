@@ -77,6 +77,15 @@ class ProductAdmin(HtmxModelAdmin):
 | `htmx_enabled` | bool | Master toggle (default: True) |
 | `toast_messages` | bool | Show toast notifications (default: True) |
 
+## Admin Theme Support
+
+django-htmx-admin automatically detects and adapts to your admin theme:
+
+- **Default Django Admin** — Full support out of the box
+- **Grappelli** — Automatic detection and themed templates
+
+The package auto-detects which theme is installed and uses the appropriate templates and styling.
+
 ## How It Works
 
 django-htmx-admin uses HTMX to enhance Django Admin with partial page updates:
