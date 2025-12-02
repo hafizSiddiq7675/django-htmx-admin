@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: django-htmx-admin
-Version: 1.0.0
+Version: 1.0.1
 Summary: HTMX-Powered Django Admin Enhancement
 Home-page: https://github.com/yourusername/django-htmx-admin
 Author: django-htmx-admin

@@ -264,12 +264,26 @@ class HtmxModelAdmin(HtmxResponseMixin, admin.ModelAdmin):
         else:
             form_class = self.get_form(request, obj)
 
+        # Get prepopulated fields configuration
+        prepopulated_fields = getattr(self, 'prepopulated_fields', {})
+        # Filter to only include fields that are in modal_fields
+        if self.modal_fields:
+            prepopulated_fields = {
+                k: v for k, v in prepopulated_fields.items()
+                if k in self.modal_fields and all(f in self.modal_fields for f in v)
+            }
+
         if request.method == 'GET':
             form = form_class(instance=obj)
             return render(
                 request,
                 'htmx_admin/partials/modal_form.html',
-                {'form': form, 'object': obj, 'opts': self.model._meta}
+                {
+                    'form': form,
+                    'object': obj,
+                    'opts': self.model._meta,
+                    'prepopulated_fields': prepopulated_fields,
+                }
             )
 
         elif request.method == 'POST':
@@ -299,7 +313,12 @@ class HtmxModelAdmin(HtmxResponseMixin, admin.ModelAdmin):
                 response = render(
                     request,
                     'htmx_admin/partials/modal_form.html',
-                    {'form': form, 'object': obj, 'opts': self.model._meta}
+                    {
+                        'form': form,
+                        'object': obj,
+                        'opts': self.model._meta,
+                        'prepopulated_fields': prepopulated_fields,
+                    }
                 )
                 response.status_code = 422
                 return response

@@ -57,3 +57,68 @@
         </form>
     </div>
 </div>
+
+{% if prepopulated_fields and not object %}
+<script>
+(function() {
+    // Slugify function - converts text to URL-safe slug
+    function slugify(text) {
+        return text
+            .toString()
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, '-')        // Replace spaces with -
+            .replace(/[^\w\-]+/g, '')    // Remove all non-word chars except -
+            .replace(/\-\-+/g, '-')      // Replace multiple - with single -
+            .replace(/^-+/, '')          // Trim - from start
+            .replace(/-+$/, '');         // Trim - from end
+    }
+
+    // Setup prepopulated fields
+    var prepopulatedFields = {
+        {% for target, sources in prepopulated_fields.items %}
+        "{{ target }}": [{% for src in sources %}"{{ src }}"{% if not forloop.last %}, {% endif %}{% endfor %}]{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    };
+
+    for (var targetField in prepopulatedFields) {
+        if (prepopulatedFields.hasOwnProperty(targetField)) {
+            (function(targetField) {
+                var sourceFields = prepopulatedFields[targetField];
+                var targetInput = document.getElementById('id_' + targetField);
+
+                if (targetInput && !targetInput.value) {
+                    // Mark as prepopulated (can be edited manually)
+                    targetInput.dataset.prepopulated = 'true';
+
+                    // Add event listeners to source fields
+                    sourceFields.forEach(function(sourceField) {
+                        var sourceInput = document.getElementById('id_' + sourceField);
+                        if (sourceInput) {
+                            sourceInput.addEventListener('input', function() {
+                                if (targetInput.dataset.prepopulated === 'true') {
+                                    // Combine values from all source fields
+                                    var values = [];
+                                    sourceFields.forEach(function(sf) {
+                                        var input = document.getElementById('id_' + sf);
+                                        if (input && input.value) {
+                                            values.push(input.value);
+                                        }
+                                    });
+                                    targetInput.value = slugify(values.join(' '));
+                                }
+                            });
+                        }
+                    });
+
+                    // Stop auto-populating if user manually edits the target field
+                    targetInput.addEventListener('input', function() {
+                        this.dataset.prepopulated = 'false';
+                    });
+                }
+            })(targetField);
+        }
+    }
+})();
+</script>
+{% endif %}
