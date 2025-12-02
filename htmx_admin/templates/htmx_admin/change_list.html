@@ -51,6 +51,11 @@
     <div id="modal-container"></div>
 </div>
 
+<!-- Top count (OOB target) -->
+<p class="paginator htmx-result-count" id="htmx-total-count-top">
+    <span>{{ cl.result_count }} {% translate "total" %}</span>
+</p>
+
 <!-- HTMX Table -->
 <div id="result-list-container"
      hx-trigger="refreshTable from:body"

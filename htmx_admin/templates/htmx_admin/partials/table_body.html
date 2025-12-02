@@ -80,7 +80,6 @@
         </tbody>
     </table>
 </div>
-<p class="{% if is_grappelli %}grp-pagination{% else %}paginator{% endif %}">{{ cl.result_count }} {{ opts.verbose_name_plural }}</p>
 {% else %}
 <p class="{% if is_grappelli %}grp-pagination{% else %}paginator{% endif %}">{% translate "0 results" %}</p>
 {% endif %}

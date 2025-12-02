@@ -104,11 +104,42 @@
         return cookieValue;
     }
 
+    // ========== Pagination Count Updates ==========
+
+    /**
+     * Update pagination counts after table refresh
+     * Counts the rows in the table and updates all pagination elements
+     */
+    function updatePaginationCounts() {
+        // Count rows in the table
+        var table = document.getElementById('result_list');
+        if (!table) return;
+
+        var rows = table.querySelectorAll('tbody tr[data-row-id]');
+        var count = rows.length;
+
+        // Update Grappelli pagination (li.grp-results)
+        var grpResults = document.querySelectorAll('li.grp-results');
+        grpResults.forEach(function(el) {
+            el.innerHTML = '<span>' + count + ' total</span>';
+        });
+
+        // Update default Django admin pagination (.paginator)
+        var paginators = document.querySelectorAll('.paginator:not(.grp-pagination)');
+        paginators.forEach(function(el) {
+            // Check if it's a count display (not the page navigation)
+            if (el.textContent.match(/\d+\s*(total|results?)/i)) {
+                el.innerHTML = count + ' total';
+            }
+        });
+    }
+
     // ========== Expose utilities globally ==========
     window.htmxAdmin = {
         showToast: showToast,
         closeModal: closeModal,
-        getCookie: getCookie
+        getCookie: getCookie,
+        updatePaginationCounts: updatePaginationCounts
     };
 
     // ========== Initialize Event Listeners ==========
@@ -159,12 +190,14 @@
             }
         });
 
-        // Listen for refreshTable trigger from server (triggers table reload)
-        document.body.addEventListener('refreshTable', function() {
-            var tableContainer = document.getElementById('result-list-container');
-            if (tableContainer && window.htmx) {
-                // Use the table container's own htmx config to reload
-                htmx.trigger(tableContainer, 'refreshTable');
+        // Note: Table refresh is handled by HTMX via hx-trigger="refreshTable from:body"
+        // The backend sends HX-Trigger: refreshTable header which HTMX catches automatically
+
+        // Update pagination counts after table refresh
+        document.body.addEventListener('htmx:afterSwap', function(event) {
+            var target = event.detail.target;
+            if (target && target.id === 'result-list-container') {
+                updatePaginationCounts();
             }
         });
 

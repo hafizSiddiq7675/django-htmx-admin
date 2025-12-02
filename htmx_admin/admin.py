@@ -258,15 +258,11 @@ class HtmxModelAdmin(HtmxResponseMixin, admin.ModelAdmin):
         else:
             obj = get_object_or_404(self.model, pk=object_id)
 
-        # Get the form class
-        form_class = self.get_form(request, obj)
-
-        # Filter to modal_fields if specified
+        # Get the form class - pass fields=self.modal_fields if specified
         if self.modal_fields:
-            class ModalForm(form_class):
-                class Meta(form_class.Meta):
-                    fields = self.modal_fields
-            form_class = ModalForm
+            form_class = self.get_form(request, obj, fields=self.modal_fields)
+        else:
+            form_class = self.get_form(request, obj)
 
         if request.method == 'GET':
             form = form_class(instance=obj)
@@ -279,10 +275,11 @@ class HtmxModelAdmin(HtmxResponseMixin, admin.ModelAdmin):
         elif request.method == 'POST':
             form = form_class(request.POST, request.FILES, instance=obj)
             if form.is_valid():
-                self.save_model(request, form.instance, form, change=bool(obj))
+                # Save the form - commit=False to allow save_model hook
+                new_obj = form.save(commit=False)
+                self.save_model(request, new_obj, form, change=bool(obj))
                 # Save many-to-many relationships if the form has them
-                if hasattr(form, 'save_m2m'):
-                    form.save_m2m()
+                form.save_m2m()
 
                 # Return empty content with triggers for:
                 # 1. showMessage - display success toast
@@ -292,7 +289,7 @@ class HtmxModelAdmin(HtmxResponseMixin, admin.ModelAdmin):
                 response['HX-Trigger'] = json.dumps({
                     'showMessage': {
                         'level': 'success',
-                        'message': f'{form.instance} saved successfully.'
+                        'message': f'{new_obj} saved successfully.'
                     },
                     'refreshTable': True,
                     'modalClosed': True
