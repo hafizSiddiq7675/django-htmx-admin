@@ -1,0 +1,12 @@
+Django>=4.0
+django-htmx>=1.14.0
+
+[dev]
+pytest
+pytest-django
+coverage
+flake8
+black
+isort
+build
+twine

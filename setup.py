@@ -26,6 +26,7 @@ setup(
         "htmx_admin": [
             "templates/htmx_admin/*.html",
             "templates/htmx_admin/partials/*.html",
+            "templates/htmx_admin/grappelli/*.html",
             "static/htmx_admin/*.js",
             "static/htmx_admin/*.css",
         ],
