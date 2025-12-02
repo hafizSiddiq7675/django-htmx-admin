@@ -13,7 +13,7 @@
 {% if htmx_enabled and modal_fields %}
 <li>
     <a href="#"
-       class="grp-add-link grp-state-focus btn-add-htmx"
+       class="btn-add-htmx"
        hx-get="{% htmx_modal_url opts 'add' %}"
        hx-target="#modal-container"
        hx-swap="innerHTML"

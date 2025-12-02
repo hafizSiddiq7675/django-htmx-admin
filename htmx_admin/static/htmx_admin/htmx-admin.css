@@ -773,26 +773,27 @@
     color: #666;
 }
 
-/* Grappelli Add button in toolbar - match grp-add-link exactly */
+/* Grappelli Add button in toolbar - match Add Category button exactly */
 .grp-object-tools .btn-add-htmx,
 .grp-object-tools li .btn-add-htmx,
 .grp-object-tools li a.btn-add-htmx,
 ul.grp-object-tools li a.grp-add-link.btn-add-htmx,
 a.grp-add-link.btn-add-htmx {
-    /* Match Grappelli's grp-add-link styling exactly */
-    background: none !important;
-    background-color: transparent !important;
-    color: #309bbf !important;
+    /* Match Grappelli's Add button styling (dark background) */
+    background: #444 !important;
+    background-color: #444 !important;
+    color: #fff !important;
     border: none !important;
-    padding: 0 !important;
-    border-radius: 0 !important;
+    outline: none !important;
+    padding: 5px 10px !important;
+    border-radius: 3px !important;
     cursor: pointer !important;
     font-size: 11px !important;
     font-weight: normal !important;
     text-transform: uppercase !important;
-    display: inline !important;
+    display: inline-block !important;
     text-decoration: none !important;
-    line-height: inherit !important;
+    line-height: 15px !important;
     width: auto !important;
     height: auto !important;
     min-width: auto !important;
@@ -802,8 +803,8 @@ a.grp-add-link.btn-add-htmx {
     visibility: visible !important;
     opacity: 1 !important;
     box-shadow: none !important;
-    margin: 0 !important;
-    vertical-align: baseline !important;
+    margin: 0 0 0 5px !important;
+    vertical-align: middle !important;
 }
 
 .grp-object-tools .btn-add-htmx:hover,
@@ -811,10 +812,25 @@ a.grp-add-link.btn-add-htmx {
 .grp-object-tools li a.btn-add-htmx:hover,
 ul.grp-object-tools li a.grp-add-link.btn-add-htmx:hover,
 a.grp-add-link.btn-add-htmx:hover {
-    background: none !important;
-    background-color: transparent !important;
-    color: #309bbf !important;
-    text-decoration: underline !important;
+    background: #222 !important;
+    background-color: #222 !important;
+    color: #fff !important;
+    text-decoration: none !important;
+}
+
+/* Remove focus outline/border for Grappelli Quick Add button */
+.grp-object-tools .btn-add-htmx:focus,
+.grp-object-tools li .btn-add-htmx:focus,
+.grp-object-tools li a.btn-add-htmx:focus,
+ul.grp-object-tools li a.grp-add-link.btn-add-htmx:focus,
+a.grp-add-link.btn-add-htmx:focus,
+a.grp-add-link.grp-state-focus.btn-add-htmx {
+    background: #444 !important;
+    background-color: #444 !important;
+    color: #fff !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
 }
 
 /* Default admin Add button */
