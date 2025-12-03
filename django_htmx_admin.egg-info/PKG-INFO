@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: django-htmx-admin
-Version: 1.0.1
+Version: 1.0.2
 Summary: HTMX-Powered Django Admin Enhancement
 Home-page: https://github.com/yourusername/django-htmx-admin
 Author: django-htmx-admin
@@ -55,6 +55,20 @@ Dynamic: requires-python
 HTMX-Powered Django Admin Enhancement
 
 A drop-in enhancement package that adds HTMX-powered interactions to Django Admin without requiring developers to rewrite their admin classes.
+
+## Screenshots
+
+### Inline Cell Editing
+![Inline Editing](docs/images/inline-editing.png)
+
+### Modal Forms
+![Modal Form](docs/images/modal-form.png)
+
+### Toast Notifications
+![Toast Notifications](docs/images/toast-notification.png)
+
+### Table with HTMX Actions
+![Table Actions](docs/images/table-actions.png)
 
 ## Features
 

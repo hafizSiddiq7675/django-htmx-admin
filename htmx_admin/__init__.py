@@ -5,7 +5,7 @@ HTMX-Powered Django Admin Enhancement
 A drop-in enhancement package that adds HTMX-powered interactions to Django Admin.
 """
 
-__version__ = '1.0.1'
+__version__ = '1.0.2'
 __author__ = 'django-htmx-admin'
 __license__ = 'MIT'
 
