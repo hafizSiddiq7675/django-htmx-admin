@@ -4,6 +4,20 @@ HTMX-Powered Django Admin Enhancement
 
 A drop-in enhancement package that adds HTMX-powered interactions to Django Admin without requiring developers to rewrite their admin classes.
 
+## Screenshots
+
+### Inline Cell Editing
+![Inline Editing](docs/images/inline-editing.png)
+
+### Modal Forms
+![Modal Form](docs/images/modal-form.png)
+
+### Toast Notifications
+![Toast Notifications](docs/images/toast-notification.png)
+
+### Table with HTMX Actions
+![Table Actions](docs/images/table-actions.png)
+
 ## Features
 
 - **Inline Cell Editing** — Click any cell to edit in place

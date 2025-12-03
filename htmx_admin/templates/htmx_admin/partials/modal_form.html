@@ -58,6 +58,56 @@
     </div>
 </div>
 
+{# Initialize date/time widgets - convert to HTML5 native inputs #}
+<script>
+(function() {
+    var modal = document.getElementById('htmx-modal');
+    if (!modal) return;
+
+    // Convert Django's text inputs to HTML5 date/time inputs for better UX
+    // DateField inputs have class 'vDateField'
+    modal.querySelectorAll('input.vDateField').forEach(function(input) {
+        if (input.type === 'text') {
+            var value = input.value;
+            input.type = 'date';
+            if (value) {
+                // Django uses YYYY-MM-DD format which is already correct for HTML5 date
+                input.value = value;
+            }
+        }
+    });
+
+    // TimeField inputs have class 'vTimeField'
+    modal.querySelectorAll('input.vTimeField').forEach(function(input) {
+        if (input.type === 'text') {
+            var value = input.value;
+            input.type = 'time';
+            if (value) {
+                // Handle HH:MM:SS format - trim seconds for HTML5 time input
+                var timeParts = value.split(':');
+                if (timeParts.length >= 2) {
+                    input.value = timeParts[0].padStart(2, '0') + ':' + timeParts[1].padStart(2, '0');
+                }
+            }
+        }
+    });
+
+    // DateTimeField in Django admin is split into two inputs:
+    // - Date part: input[name$="_0"] with class vDateField
+    // - Time part: input[name$="_1"] with class vTimeField
+    // These are already handled by the above code
+
+    // Also try to initialize Django's built-in calendar widgets if available
+    if (typeof DateTimeShortcuts !== 'undefined') {
+        try {
+            DateTimeShortcuts.init();
+        } catch (e) {
+            // Ignore errors - HTML5 inputs will work as fallback
+        }
+    }
+})();
+</script>
+
 {% if prepopulated_fields and not object %}
 <script>
 (function() {
