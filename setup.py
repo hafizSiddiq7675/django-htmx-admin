@@ -13,7 +13,7 @@ long_description = (this_directory / "README.md").read_text(encoding="utf-8") if
 
 setup(
     name="django-htmx-admin",
-    version="1.0.2",
+    version="1.0.3",
     author="django-htmx-admin",
     author_email="",
     description="HTMX-Powered Django Admin Enhancement",

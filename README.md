@@ -7,16 +7,16 @@ A drop-in enhancement package that adds HTMX-powered interactions to Django Admi
 ## Screenshots
 
 ### Inline Cell Editing
-![Inline Editing](docs/images/inline-editing.png)
+![Inline Editing](https://raw.githubusercontent.com/hafizSiddiq7675/django-htmx-admin/main/docs/images/inline-editing.png)
 
 ### Modal Forms
-![Modal Form](docs/images/modal-form.png)
+![Modal Form](https://raw.githubusercontent.com/hafizSiddiq7675/django-htmx-admin/main/docs/images/modal-form.png)
 
 ### Toast Notifications
-![Toast Notifications](docs/images/toast-notification.png)
+![Toast Notifications](https://raw.githubusercontent.com/hafizSiddiq7675/django-htmx-admin/main/docs/images/toast-notification.png)
 
 ### Table with HTMX Actions
-![Table Actions](docs/images/table-actions.png)
+![Table Actions](https://raw.githubusercontent.com/hafizSiddiq7675/django-htmx-admin/main/docs/images/table-actions.png)
 
 ## Features
 
