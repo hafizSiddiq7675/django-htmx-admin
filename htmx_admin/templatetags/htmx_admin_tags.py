@@ -6,6 +6,7 @@ to HTML elements in Django templates.
 """
 
 from django import template
+from django.contrib.admin.utils import lookup_field
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 import json
@@ -203,7 +204,9 @@ def get_field_value(obj, field_name):
     Returns:
         Field value
     """
-    return getattr(obj, field_name, '')
+    #return getattr(obj, field_name, '')
+    f, attr, value = lookup_field(field_name, obj)
+    return value
 
 
 @register.filter(name='enumerate')
